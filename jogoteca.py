@@ -4,7 +4,7 @@ app = Flask(__name__)
 
 @app.route('/inicio')
 def ola():
-    return render_template('lista.html')
+    return render_template('lista.html', titulo='Jogos')
 
 
-app.run(host='0.0.0.0', port=8080)
+app.run(host='localhost', port=8080)

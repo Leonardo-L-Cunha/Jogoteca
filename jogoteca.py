@@ -52,4 +52,10 @@ def autencticar():
         flash('Usuario ou senha invalidos')
         return redirect('/login')
 
+@app.route('/logout')
+def logout():
+    session['usuario_logado'] = None
+    flash('Logout com sucesso!')
+    return redirect('/')    
+
 app.run(host='localhost', port=8080, debug=True)

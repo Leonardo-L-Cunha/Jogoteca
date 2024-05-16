@@ -16,6 +16,22 @@ jogo3 = Jogo('Gears 5', 'Açao', 'Xbox One')
     
 lista = [jogo1, jogo2, jogo3]
 
+class Usuario:
+    def __init__(self, nome, nickname, senha):
+        self.nome = nome
+        self.nickname = nickname
+        self.senha = senha
+
+usuario_1 = Usuario('Leonardo', 'leo', '32754747')
+usuario_2 = Usuario('Dean', 'dw', 'supernatural')
+usuario_3 = Usuario('Sam', 'sm', 'supernatural')
+
+usuarios = {
+    usuario_1.nickname : usuario_1,
+    usuario_2.nickname : usuario_2,
+    usuario_3.nickname : usuario_3
+}
+
 @app.route('/')
 def index():
     return render_template('lista.html', titulo='Jogos', jogos=lista)
@@ -47,11 +63,13 @@ def login():
 
 @app.route('/autenticar', methods=['POST'])
 def autenticar():
-    if '1234' == request.form['senha']:
-        session['usuario_logado'] = request.form['usuario']
-        flash(f'{session['usuario_logado'] } logado com sucesso!')
-        proxima_pagina = request.form['proxima']
-        return redirect(proxima_pagina)
+    if request.form['usuario'] in usuarios:
+        usuario = usuarios[request.form['usuario']]
+        if request.form['senha'] == usuario.senha:
+            session['usuario_logado'] = usuario.nickname
+            flash(f'{usuario.nickname} logado com sucesso!')
+            proxima_pagina = request.form['proxima']
+            return redirect(proxima_pagina)
     else:
         flash('Usuario ou senha invalidos')
         return redirect(url_for('login'))

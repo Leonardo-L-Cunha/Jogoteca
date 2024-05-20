@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 app.secret_key = 'pokemon123'
 
-app.config['SQLALCHEMY_DATAVASE_URI'] = '{SGBD}://{usuario}:{senha}@{servidor}/{database}'.format(
+app.config['SQLALCHEMY_DATABASE_URI'] = '{SGBD}://{usuario}:{senha}@{servidor}/{database}'.format(
     SGBD = 'mysql+mysqlconnector',
     usuario = 'root',
     senha = '1988',
@@ -16,7 +16,7 @@ app.config['SQLALCHEMY_DATAVASE_URI'] = '{SGBD}://{usuario}:{senha}@{servidor}/{
 db = SQLAlchemy(app)
 
 class Jogos(db.Model):
-    id = db.Column(db.Integer, primary_key=True, autoincremente=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nome = db.Column(db.String(50), nullable=False)
     categoria = db.Column(db.String(40), nullable=False)
     console = db.Column(db.String(20), nullable=False)
@@ -37,6 +37,7 @@ class Usuarios(db.Model):
 
 @app.route('/')
 def index():
+    lista = Jogos.query.order_by(Jogos.id)
     return render_template('lista.html', titulo='Jogos', jogos=lista)
 
 

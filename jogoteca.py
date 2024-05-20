@@ -1,36 +1,21 @@
 from flask import Flask, render_template, request, redirect, session, flash, url_for
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
 app.secret_key = 'pokemon123'
-class Jogo:
-    def __init__(self, nome, categoria, console):
-        self.nome = nome
-        self.categoria = categoria
-        self.console = console
+
+app.config['SQLALCHEMY_DATAVASE_URI'] = '{SGBD}://{usuario}:{senha}@{servidor}/{database}'.format(
+    SGBD = 'mysql+mysqlconnector',
+    usuario = 'root',
+    senha = '1988',
+    servidor = 'localhost',
+    database = 'jogoteca'
+)
+
+db = SQLAlchemy(app)
 
 
-jogo1 = Jogo('Halo', 'Açao', 'Xbox')
-jogo2 = Jogo('Mass Effect', 'RPG', 'Xbox 360')
-jogo3 = Jogo('Gears 5', 'Açao', 'Xbox One')
-    
-lista = [jogo1, jogo2, jogo3]
-
-class Usuario:
-    def __init__(self, nome, nickname, senha):
-        self.nome = nome
-        self.nickname = nickname
-        self.senha = senha
-
-usuario_1 = Usuario('Leonardo', 'leo', '32754747')
-usuario_2 = Usuario('Dean', 'dw', 'supernatural')
-usuario_3 = Usuario('Sam', 'sm', 'supernatural')
-
-usuarios = {
-    usuario_1.nickname : usuario_1,
-    usuario_2.nickname : usuario_2,
-    usuario_3.nickname : usuario_3
-}
 
 @app.route('/')
 def index():

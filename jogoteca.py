@@ -25,8 +25,8 @@ class Jogos(db.Model):
         return '<Name %r>' % self.name
 
 class Usuarios(db.Model):
-    nickname = db.Column(db.String(8), primary_key=True)
-    nome = db.Column(db.String(20), nullable=False)
+    nome = db.Column(db.String(20), primary_key=True)
+    nickname = db.Column(db.String(8), nullable=False)
     senha = db.Column(db.String(100), nullable=False)
    
 
@@ -54,9 +54,16 @@ def criar():
     categoria = request.form['categoria']
     console = request.form['console']
 
-    jogo = Jogo(nome,categoria,console)
+    jogo = Jogos.query.filter_by(nome=nome).first()
 
-    lista.append(jogo)
+    if jogo:
+        flash('Jogo já existe!')
+        return redirect(url_for('index'))
+    
+    novo_jogo = Jogos(nome=nome, categoria=categoria, console=console)
+    db.session.add(novo_jogo)
+    db.session.commit()
+
                  
     return redirect(url_for('index'))
 
@@ -67,7 +74,7 @@ def login():
 
 @app.route('/autenticar', methods=['POST'])
 def autenticar():
-    usuario = Jogos.query.filter_by(nickname=request.form['usuario']).first()
+    usuario = Usuarios.query.filter_by(nickname=request.form['usuario']).first()
     if usuario:
         if request.form['senha'] == usuario.senha:
             session['usuario_logado'] = usuario.nickname

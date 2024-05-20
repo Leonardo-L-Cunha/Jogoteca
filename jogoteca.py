@@ -67,8 +67,8 @@ def login():
 
 @app.route('/autenticar', methods=['POST'])
 def autenticar():
-    if request.form['usuario'] in usuarios:
-        usuario = usuarios[request.form['usuario']]
+    usuario = Jogos.query.filter_by(nickname=request.form['usuario']).first()
+    if usuario:
         if request.form['senha'] == usuario.senha:
             session['usuario_logado'] = usuario.nickname
             flash(f'{usuario.nickname} logado com sucesso!')
